@@ -12,6 +12,12 @@ A Palworld-style survival economy inside Gen 1 Pokemon
    `mods/palworld_crafting/`.
 3. Enable it in the mod manager. A **DIFFICULTY** option (NORMAL /
    HARD) lives in the mod's options.
+4. **Recommended:** also install
+   [Overworld Encounters](https://github.com/gamecorner-033/Gen1PC-OverworldEncounters)
+   — this mod reads its per-species follower art so your base crew
+   look like themselves. It can stay **disabled**; only the folder
+   needs to exist. Without it, base Pokémon use a generic sprite and
+   everything else works normally.
 
 Best experienced on a fresh save. It loads fine mid-save too: your
 existing Pokemon join the star ladder at star 1.
@@ -137,11 +143,14 @@ silently failing.
 Assigned Pokemon wander the room and are talkable.
 
 **Sprite dependency (optional).** Base Pokemon use per-species
-overworld sprites read directly from the Overworld Encounters mod's
-follower art. Keep that mod's folder in `mods/` and the sprites load
-even if the mod itself is disabled — no roaming-encounter behavior is
-pulled in. Delete the folder and base Pokemon fall back to a generic
-sprite. Nothing in this mod requires it.
+overworld sprites read directly from the
+[Overworld Encounters](https://github.com/gamecorner-033/Gen1PC-OverworldEncounters)
+mod's follower art — it is **not bundled** here (third-party assets).
+Keep that mod's folder in `mods/` and the sprites load even if the
+mod itself is disabled — no roaming-encounter behavior is pulled in.
+Without the folder, base Pokemon fall back to a generic sprite.
+Nothing in this mod requires it, and the manifest declares it as an
+optional dependency.
 
 ---
 
