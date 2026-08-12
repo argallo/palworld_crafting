@@ -3,7 +3,7 @@
 return {
   summary = "A Palworld survival economy inside Gen 1: base building, working POKeMON, breeding with egg moves, essence stars, and hourly street bosses.",
   author = "argallo",
-  contact = "https://github.com/argallo/palworld_crafting",
+  contact = "https://github.com/argallo/palworld_mechanics_mod",
   tags = { "gameplay", "palworld", "base-building", "crafting",
            "breeding", "bosses", "difficulty", "economy" },
   credits = {

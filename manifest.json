@@ -21,5 +21,5 @@
   "description": "Palworld-style survival economy for Gen 1: a placeable SECRET BASE where your POKeMON work jobs by type, craft queues, breeding with egg moves, an essence CONDENSER star system, hourly overworld bosses with summonable empowered forms, and a HARD difficulty built around breeding. Balls are crafted from apricorns, stones are crafted from ore, and every gym badge unlocks a blueprint.",
   "assets_transforms": "transforms.lua",
   "affects_link": true,
-  "github": "argallo/palworld_crafting"
+  "github": "argallo/palworld_mechanics_mod"
 }

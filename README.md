@@ -8,7 +8,7 @@ and stars, craft everything, and duel hourly street bosses.
 ## Install
 
 1. Grab the latest `palworld_crafting-<version>.zip` from
-   [Releases](https://github.com/argallo/palworld_crafting/releases)
+   [Releases](https://github.com/argallo/palworld_mechanics_mod/releases)
    (or use **Import mod .zip** in the launcher's mod manager).
 2. Unpack it into your `mods/` folder so it sits at
    `mods/palworld_crafting/`.
