@@ -2403,6 +2403,15 @@ return function(game)
   check("the summon carries no blast moves either", not blast)
   check("the tablet burned in the summons",
         game.save.inventory.TABLET_ROCK == nil)
+  -- shoot once the FIGHT menu is up: both HUDs drawn, the boss's
+  -- level and our own POKeMON in frame
+  for _ = 1, 80 do
+    local t19 = game.stack:top()
+    if t19 and t19.phase == "menu" then break end
+    U.tap(game, "a")
+    U.wait(10)
+  end
+  U.wait(10)
   U.shot(game, SHOTS .. "47_summon_battle.png")
   mashToOverworld(2000)   -- the stone crew grinds it out
   check("the summons cleared cleanly", (function()
