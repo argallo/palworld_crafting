@@ -1,9 +1,7 @@
 # Palworld Crafting
 
 A Palworld-style survival economy inside Gen 1 Pokemon Red, for
-[gen1recomp](https://github.com/bryanthaboi/gen1recomp): build a
-secret base, put your POKeMON to work by type, breed for egg moves
-and stars, craft everything, and duel hourly street bosses.
+[gen1recomp](https://github.com/bryanthaboi/gen1recomp): secret base, put your Pokemon to work by type, craft your pokeballs, breed for egg moves, condense for stars, craft everything, and duel hourly street bosses.
 
 ## Install
 
@@ -44,14 +42,14 @@ roles.
 
 ## 1. Materials
 
-### Apricorns
-
 | Source | Rate | Notes |
 |---|---|---|
 | Wild battle win | 85% | 1 material roll |
 | Trainer battle win | 100% | 1 material roll, guaranteed |
 | Overworld pickup | — | 48 fixed spots, one-time |
 | Former ball pickups | — | 1:1 substitution |
+
+### Apricorns
 
 A material roll checks the specialty drops first (seed → organ → ore
 → wood, rates below) and pays an apricorn when none procs. Apricorn
