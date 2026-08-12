@@ -14,7 +14,7 @@ A Palworld-style survival economy inside Gen 1 Pokemon Red, for
    HARD) lives in the mod's options.
 
 Best experienced on a fresh save. It loads fine mid-save too: your
-existing POKeMON join the star ladder at star 1.
+existing Pokemon join the star ladder at star 1.
 
 ## Screenshots
 
@@ -39,6 +39,8 @@ secret base, and staff those stations with Pokémon assigned to work
 roles.
 
 ---
+
+## Below is an AI generated user guide based on the mod coding changes I've made. 
 
 ## 1. Materials
 
@@ -81,7 +83,7 @@ Surplus apricorns sell at any mart for half price.
 |---|---|---|
 | WOOD | Win, defeated level `< L12` | 35% |
 | ORE | Win vs. ROCK or GROUND type, any level | 25% |
-| TYPE ORGAN | Any win | 15%, typed to one of the defeated Pokémon's own types |
+| TYPE ORGAN | Any win | 15%, typed to one of the defeated Pokemon's own types |
 | GRAPE SEED | Win vs. BUG, GRASS, or FLYING | 10% |
 
 Rates roll in priority order (seed → organ → ore → wood → apricorn),
@@ -110,42 +112,42 @@ the CRAFT TABLE. One base per save.
   wooden floor. Exit via the two-cell door mat on the south edge
   (step on it, press down — same as a mart).
 - Wall/floor palette follows the region the entrance tile sits in.
-- A fully functional Pokémon PC sits in the top-left corner: Bill's
-  PC boxes, item storage, and Oak's rating, identical to the Pokémon
+- A fully functional Pokemon PC sits in the top-left corner: Bill's
+  PC boxes, item storage, and Oak's rating, identical to the Pokemon
   Center menu.
 - First entry finds an item ball containing one FERM.JUICE.
 - Room contents persist through pack-up and re-placement. Everything
   stays where it was left.
 
-Capacity: 8 assigned Pokémon, 12 after the east-wing expansion.
+Capacity: 8 assigned Pokemon, 12 after the east-wing expansion.
 
 ### Base roster UI
 
-While inside the base, the Start menu gains a **BASE POKéMON** row.
+While inside the base, the Start menu gains a **BASE Pokemon** row.
 Sprite grid of the current crew; the panel below live-updates with
-the highlighted Pokémon's level, star rank, and jobs. SELECT opens
+the highlighted Pokemon's level, star rank, and jobs. SELECT opens
 the hire picker, which grids the party and every PC box (source shown
 on the top border) with each candidate's work skills visible before
 commit. Press A on a crew member for TO PARTY / TO PC / SKILLS.
 
-Standard constraints apply: at least one Pokémon must stay in the
+Standard constraints apply: at least one Pokemon must stay in the
 party, and full parties/boxes are rejected with a message rather than
 silently failing.
 
-Assigned Pokémon wander the room and are talkable.
+Assigned Pokemon wander the room and are talkable.
 
-**Sprite dependency (optional).** Base Pokémon use per-species
+**Sprite dependency (optional).** Base Pokemon use per-species
 overworld sprites read directly from the Overworld Encounters mod's
 follower art. Keep that mod's folder in `mods/` and the sprites load
 even if the mod itself is disabled — no roaming-encounter behavior is
-pulled in. Delete the folder and base Pokémon fall back to a generic
+pulled in. Delete the folder and base Pokemon fall back to a generic
 sprite. Nothing in this mod requires it.
 
 ---
 
 ## 3. Work suitabilities
 
-Every Pokémon is a worker. Each of its types maps to one job:
+Every Pokemon is a worker. Each of its types maps to one job:
 
 | Type | Job | Type | Job |
 |---|---|---|---|
@@ -174,7 +176,7 @@ row opens a sprite grid of all 151 species. Navigate with the d-pad;
 the panel below updates live. SELECT filters the grid to a single job
 — the active filter and its worker count show on the top border, the
 hint on the bottom-right border. Pick ALL to clear. Every base
-Pokémon's action menu also has a SKILLS entry for its own card.
+Pokemon's action menu also has a SKILLS entry for its own card.
 
 ---
 
@@ -600,3 +602,5 @@ POKEPORT_IDENTITY=palcraft love .`) walks every feature end to end.
 - Kurt-style specialty balls (LEVEL, LURE, MOON, etc.) built on the
   balls registry\'s real Gen 1 catch math.
 - Additional placeable stations for the base interior.
+
+Please play test and let me know what you think! I'm happy to make changes and keep improving things as the community continues to give feedback. Enjoy!
