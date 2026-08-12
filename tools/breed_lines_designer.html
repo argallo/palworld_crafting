@@ -1,0 +1,445 @@
+<title>Breed Lines — Palworld Crafting</title>
+<style>
+:root {
+  --paper: #FFEFFF;
+  --panel: #FFF7FF;
+  --ink: #191010;
+  --ink-soft: #5c4a52;
+  --line: #191010;
+  --gold: #b8860b;
+  --gold-soft: #f3e3b3;
+  --blue: #5A7BBD;
+  --blue-soft: #dde4f5;
+  --pink: #c9518f;
+  --pink-soft: #fbdde9;
+  --green: #2f7d43;
+  --warn-bg: #fff3cd;
+  --shadow: #19101033;
+}
+:root:not([data-theme="light"]) { }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #171221;
+    --panel: #211a2e;
+    --ink: #FFEFFF;
+    --ink-soft: #b3a6bd;
+    --line: #FFEFFF;
+    --gold: #FFE673;
+    --gold-soft: #4a3d14;
+    --blue: #94A5DE;
+    --blue-soft: #26304d;
+    --pink: #F7B5C5;
+    --pink-soft: #4b2537;
+    --green: #7fd695;
+    --warn-bg: #4a3d14;
+    --shadow: #00000066;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #171221;
+  --panel: #211a2e;
+  --ink: #FFEFFF;
+  --ink-soft: #b3a6bd;
+  --line: #FFEFFF;
+  --gold: #FFE673;
+  --gold-soft: #4a3d14;
+  --blue: #94A5DE;
+  --blue-soft: #26304d;
+  --pink: #F7B5C5;
+  --pink-soft: #4b2537;
+  --green: #7fd695;
+  --warn-bg: #4a3d14;
+  --shadow: #00000066;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 15px/1.5 system-ui, -apple-system, sans-serif;
+}
+.mono { font-family: ui-monospace, Menlo, Consolas, monospace; }
+header {
+  border-bottom: 2px solid var(--line);
+  padding: 18px 24px 14px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 10px 24px;
+}
+header h1 {
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 19px;
+  letter-spacing: 2px;
+  margin: 0;
+}
+header .sub { color: var(--ink-soft); font-size: 13px; }
+.counts { margin-left: auto; display: flex; gap: 10px; }
+.count {
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-variant-numeric: tabular-nums;
+  font-size: 12px;
+  letter-spacing: 1px;
+  border: 2px solid var(--line);
+  padding: 4px 10px;
+  background: var(--panel);
+  box-shadow: 3px 3px 0 var(--shadow);
+}
+main { max-width: 1080px; margin: 0 auto; padding: 22px 24px 60px; }
+.grid { display: grid; grid-template-columns: 380px 1fr; gap: 22px; align-items: start; }
+@media (max-width: 880px) { .grid { grid-template-columns: 1fr; } }
+.card {
+  border: 2px solid var(--line);
+  background: var(--panel);
+  box-shadow: 4px 4px 0 var(--shadow);
+}
+.card h2 {
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 12px;
+  letter-spacing: 2px;
+  margin: 0;
+  padding: 10px 14px;
+  border-bottom: 2px solid var(--line);
+  background: var(--gold-soft);
+}
+.card .body { padding: 14px; display: flex; flex-direction: column; gap: 12px; }
+label.f {
+  display: flex; flex-direction: column; gap: 4px;
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 11px; letter-spacing: 1.5px; color: var(--ink-soft);
+}
+select, input[type="number"], input[type="text"], textarea {
+  font: 14px/1.4 ui-monospace, Menlo, Consolas, monospace;
+  color: var(--ink);
+  background: var(--paper);
+  border: 2px solid var(--line);
+  padding: 7px 9px;
+}
+select:focus, input:focus, textarea:focus, button:focus {
+  outline: 3px solid var(--blue);
+  outline-offset: 1px;
+}
+.times {
+  text-align: center;
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  color: var(--pink); font-size: 18px; letter-spacing: 2px;
+}
+.lineinfo { font-size: 12px; color: var(--ink-soft); min-height: 1.2em; }
+button {
+  font: 600 13px/1 ui-monospace, Menlo, Consolas, monospace;
+  letter-spacing: 1.5px;
+  color: var(--ink);
+  background: var(--gold-soft);
+  border: 2px solid var(--line);
+  padding: 10px 14px;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 var(--shadow);
+}
+button:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--shadow); }
+button.quiet { background: var(--panel); font-weight: 400; }
+button.danger { background: var(--pink-soft); }
+.msg { font-size: 13px; color: var(--pink); min-height: 1.2em; }
+table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+th {
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 10.5px; letter-spacing: 1.5px; text-align: left;
+  color: var(--ink-soft);
+  padding: 8px 10px; border-bottom: 2px solid var(--line);
+}
+td { padding: 7px 10px; border-bottom: 1px solid var(--shadow); vertical-align: middle; }
+td.num { font-variant-numeric: tabular-nums; font-family: ui-monospace, Menlo, Consolas, monospace; }
+.chip {
+  display: inline-block;
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 11.5px; letter-spacing: 0.5px;
+  border: 1.5px solid var(--line);
+  padding: 2px 7px;
+  background: var(--blue-soft);
+  margin: 1px 2px 1px 0;
+  white-space: nowrap;
+}
+.chip.child { background: var(--pink-soft); }
+.chip.chain { background: var(--warn-bg); }
+.roster { display: flex; flex-wrap: wrap; gap: 8px 14px; padding: 14px; }
+.roster label {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 12.5px;
+}
+textarea { width: 100%; min-height: 180px; resize: vertical; }
+.exportbar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; padding: 0 14px 14px; }
+.hint { font-size: 12px; color: var(--ink-soft); padding: 0 14px 12px; }
+.stack { display: flex; flex-direction: column; gap: 22px; margin-top: 22px; }
+.del { background: none; border: none; box-shadow: none; color: var(--pink); cursor: pointer; font-size: 15px; padding: 2px 6px; }
+.del:active { transform: none; }
+@media (prefers-reduced-motion: reduce) { button:active { transform: none; } }
+</style>
+
+<header>
+  <h1>BREED LINES</h1>
+  <span class="sub">pairing designer for the palworld_crafting incubator — recipes save in this browser; export Lua when done</span>
+  <div class="counts">
+    <span class="count" id="countRecipes">0 RECIPES</span>
+    <span class="count" id="countBreedOnly">0 BREED-ONLY</span>
+  </div>
+</header>
+
+<main>
+<div class="grid">
+  <section class="card">
+    <h2>NEW PAIRING</h2>
+    <div class="body">
+      <label class="f">PARENT LINE A
+        <input type="text" id="searchA" placeholder="filter lines…">
+        <select id="lineA" size="6"></select>
+        <span class="lineinfo" id="infoA"></span>
+      </label>
+      <div class="times">&times;</div>
+      <label class="f">PARENT LINE B
+        <input type="text" id="searchB" placeholder="filter lines…">
+        <select id="lineB" size="6"></select>
+        <span class="lineinfo" id="infoB"></span>
+      </label>
+      <label class="f">HATCHES INTO
+        <input type="text" id="searchC" placeholder="filter species…">
+        <select id="child" size="6"></select>
+      </label>
+      <label class="f">HATCH CHANCE %
+        <input type="number" id="chance" min="5" max="100" step="5" value="100">
+      </label>
+      <button id="add">ADD PAIRING</button>
+      <span class="msg" id="msg"></span>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>RECIPE LEDGER</h2>
+    <div style="overflow-x:auto">
+      <table>
+        <thead><tr><th>LINE A</th><th>LINE B</th><th>HATCHES</th><th>%</th><th></th></tr></thead>
+        <tbody id="ledger"></tbody>
+      </table>
+    </div>
+    <p class="hint">Any member of a parent line counts — PIDGEOT &times; FEAROW hatches the same egg as PIDGEY &times; SPEAROW. A CHAIN badge means a parent is itself breed-only.</p>
+  </section>
+</div>
+
+<div class="stack">
+  <section class="card">
+    <h2>BREED-ONLY ROSTER</h2>
+    <p class="hint" style="padding-top:12px">Checked species will be removed from wild encounters in the next phase. Uncheck to keep one findable in the wild.</p>
+    <div class="roster" id="roster"></div>
+  </section>
+
+  <section class="card">
+    <h2>EXPORT</h2>
+    <div class="body">
+      <textarea class="mono" id="luaOut" readonly aria-label="Lua export"></textarea>
+      <div class="exportbar" style="padding:0">
+        <button id="copyLua">COPY LUA</button>
+        <button class="quiet" id="copyJson">COPY JSON</button>
+        <button class="quiet" id="importJson">IMPORT JSON…</button>
+        <button class="danger" id="reset">RESET TO DEFAULTS</button>
+        <span class="msg" id="exportMsg"></span>
+      </div>
+    </div>
+  </section>
+</div>
+</main>
+
+<script>
+const MON = {"ABRA":{"dex":63,"name":"ABRA","evolvesTo":["KADABRA"]},"AERODACTYL":{"dex":142,"name":"AERODACTYL","evolvesTo":[]},"ALAKAZAM":{"dex":65,"name":"ALAKAZAM","evolvesTo":[]},"ARBOK":{"dex":24,"name":"ARBOK","evolvesTo":[]},"ARCANINE":{"dex":59,"name":"ARCANINE","evolvesTo":[]},"ARTICUNO":{"dex":144,"name":"ARTICUNO","evolvesTo":[]},"BEEDRILL":{"dex":15,"name":"BEEDRILL","evolvesTo":[]},"BELLSPROUT":{"dex":69,"name":"BELLSPROUT","evolvesTo":["WEEPINBELL"]},"BLASTOISE":{"dex":9,"name":"BLASTOISE","evolvesTo":[]},"BULBASAUR":{"dex":1,"name":"BULBASAUR","evolvesTo":["IVYSAUR"]},"BUTTERFREE":{"dex":12,"name":"BUTTERFREE","evolvesTo":[]},"CATERPIE":{"dex":10,"name":"CATERPIE","evolvesTo":["METAPOD"]},"CHANSEY":{"dex":113,"name":"CHANSEY","evolvesTo":[]},"CHARIZARD":{"dex":6,"name":"CHARIZARD","evolvesTo":[]},"CHARMANDER":{"dex":4,"name":"CHARMANDER","evolvesTo":["CHARMELEON"]},"CHARMELEON":{"dex":5,"name":"CHARMELEON","evolvesTo":["CHARIZARD"]},"CLEFABLE":{"dex":36,"name":"CLEFABLE","evolvesTo":[]},"CLEFAIRY":{"dex":35,"name":"CLEFAIRY","evolvesTo":["CLEFABLE"]},"CLOYSTER":{"dex":91,"name":"CLOYSTER","evolvesTo":[]},"CUBONE":{"dex":104,"name":"CUBONE","evolvesTo":["MAROWAK"]},"DEWGONG":{"dex":87,"name":"DEWGONG","evolvesTo":[]},"DIGLETT":{"dex":50,"name":"DIGLETT","evolvesTo":["DUGTRIO"]},"DITTO":{"dex":132,"name":"DITTO","evolvesTo":[]},"DODRIO":{"dex":85,"name":"DODRIO","evolvesTo":[]},"DODUO":{"dex":84,"name":"DODUO","evolvesTo":["DODRIO"]},"DRAGONAIR":{"dex":148,"name":"DRAGONAIR","evolvesTo":["DRAGONITE"]},"DRAGONITE":{"dex":149,"name":"DRAGONITE","evolvesTo":[]},"DRATINI":{"dex":147,"name":"DRATINI","evolvesTo":["DRAGONAIR"]},"DROWZEE":{"dex":96,"name":"DROWZEE","evolvesTo":["HYPNO"]},"DUGTRIO":{"dex":51,"name":"DUGTRIO","evolvesTo":[]},"EEVEE":{"dex":133,"name":"EEVEE","evolvesTo":["FLAREON","JOLTEON","VAPOREON"]},"EKANS":{"dex":23,"name":"EKANS","evolvesTo":["ARBOK"]},"ELECTABUZZ":{"dex":125,"name":"ELECTABUZZ","evolvesTo":[]},"ELECTRODE":{"dex":101,"name":"ELECTRODE","evolvesTo":[]},"EXEGGCUTE":{"dex":102,"name":"EXEGGCUTE","evolvesTo":["EXEGGUTOR"]},"EXEGGUTOR":{"dex":103,"name":"EXEGGUTOR","evolvesTo":[]},"FARFETCHD":{"dex":83,"name":"FARFETCH'D","evolvesTo":[]},"FEAROW":{"dex":22,"name":"FEAROW","evolvesTo":[]},"FLAREON":{"dex":136,"name":"FLAREON","evolvesTo":[]},"GASTLY":{"dex":92,"name":"GASTLY","evolvesTo":["HAUNTER"]},"GENGAR":{"dex":94,"name":"GENGAR","evolvesTo":[]},"GEODUDE":{"dex":74,"name":"GEODUDE","evolvesTo":["GRAVELER"]},"GLOOM":{"dex":44,"name":"GLOOM","evolvesTo":["VILEPLUME"]},"GOLBAT":{"dex":42,"name":"GOLBAT","evolvesTo":[]},"GOLDEEN":{"dex":118,"name":"GOLDEEN","evolvesTo":["SEAKING"]},"GOLDUCK":{"dex":55,"name":"GOLDUCK","evolvesTo":[]},"GOLEM":{"dex":76,"name":"GOLEM","evolvesTo":[]},"GRAVELER":{"dex":75,"name":"GRAVELER","evolvesTo":["GOLEM"]},"GRIMER":{"dex":88,"name":"GRIMER","evolvesTo":["MUK"]},"GROWLITHE":{"dex":58,"name":"GROWLITHE","evolvesTo":["ARCANINE"]},"GYARADOS":{"dex":130,"name":"GYARADOS","evolvesTo":[]},"HAUNTER":{"dex":93,"name":"HAUNTER","evolvesTo":["GENGAR"]},"HITMONCHAN":{"dex":107,"name":"HITMONCHAN","evolvesTo":[]},"HITMONLEE":{"dex":106,"name":"HITMONLEE","evolvesTo":[]},"HORSEA":{"dex":116,"name":"HORSEA","evolvesTo":["SEADRA"]},"HYPNO":{"dex":97,"name":"HYPNO","evolvesTo":[]},"IVYSAUR":{"dex":2,"name":"IVYSAUR","evolvesTo":["VENUSAUR"]},"JIGGLYPUFF":{"dex":39,"name":"JIGGLYPUFF","evolvesTo":["WIGGLYTUFF"]},"JOLTEON":{"dex":135,"name":"JOLTEON","evolvesTo":[]},"JYNX":{"dex":124,"name":"JYNX","evolvesTo":[]},"KABUTO":{"dex":140,"name":"KABUTO","evolvesTo":["KABUTOPS"]},"KABUTOPS":{"dex":141,"name":"KABUTOPS","evolvesTo":[]},"KADABRA":{"dex":64,"name":"KADABRA","evolvesTo":["ALAKAZAM"]},"KAKUNA":{"dex":14,"name":"KAKUNA","evolvesTo":["BEEDRILL"]},"KANGASKHAN":{"dex":115,"name":"KANGASKHAN","evolvesTo":[]},"KINGLER":{"dex":99,"name":"KINGLER","evolvesTo":[]},"KOFFING":{"dex":109,"name":"KOFFING","evolvesTo":["WEEZING"]},"KRABBY":{"dex":98,"name":"KRABBY","evolvesTo":["KINGLER"]},"LAPRAS":{"dex":131,"name":"LAPRAS","evolvesTo":[]},"LICKITUNG":{"dex":108,"name":"LICKITUNG","evolvesTo":[]},"MACHAMP":{"dex":68,"name":"MACHAMP","evolvesTo":[]},"MACHOKE":{"dex":67,"name":"MACHOKE","evolvesTo":["MACHAMP"]},"MACHOP":{"dex":66,"name":"MACHOP","evolvesTo":["MACHOKE"]},"MAGIKARP":{"dex":129,"name":"MAGIKARP","evolvesTo":["GYARADOS"]},"MAGMAR":{"dex":126,"name":"MAGMAR","evolvesTo":[]},"MAGNEMITE":{"dex":81,"name":"MAGNEMITE","evolvesTo":["MAGNETON"]},"MAGNETON":{"dex":82,"name":"MAGNETON","evolvesTo":[]},"MANKEY":{"dex":56,"name":"MANKEY","evolvesTo":["PRIMEAPE"]},"MAROWAK":{"dex":105,"name":"MAROWAK","evolvesTo":[]},"MEOWTH":{"dex":52,"name":"MEOWTH","evolvesTo":["PERSIAN"]},"METAPOD":{"dex":11,"name":"METAPOD","evolvesTo":["BUTTERFREE"]},"MEW":{"dex":151,"name":"MEW","evolvesTo":[]},"MEWTWO":{"dex":150,"name":"MEWTWO","evolvesTo":[]},"MOLTRES":{"dex":146,"name":"MOLTRES","evolvesTo":[]},"MR_MIME":{"dex":122,"name":"MR.MIME","evolvesTo":[]},"MUK":{"dex":89,"name":"MUK","evolvesTo":[]},"NIDOKING":{"dex":34,"name":"NIDOKING","evolvesTo":[]},"NIDOQUEEN":{"dex":31,"name":"NIDOQUEEN","evolvesTo":[]},"NIDORAN_F":{"dex":29,"name":"NIDORAN\u2640","evolvesTo":["NIDORINA"]},"NIDORAN_M":{"dex":32,"name":"NIDORAN\u2642","evolvesTo":["NIDORINO"]},"NIDORINA":{"dex":30,"name":"NIDORINA","evolvesTo":["NIDOQUEEN"]},"NIDORINO":{"dex":33,"name":"NIDORINO","evolvesTo":["NIDOKING"]},"NINETALES":{"dex":38,"name":"NINETALES","evolvesTo":[]},"ODDISH":{"dex":43,"name":"ODDISH","evolvesTo":["GLOOM"]},"OMANYTE":{"dex":138,"name":"OMANYTE","evolvesTo":["OMASTAR"]},"OMASTAR":{"dex":139,"name":"OMASTAR","evolvesTo":[]},"ONIX":{"dex":95,"name":"ONIX","evolvesTo":[]},"PARAS":{"dex":46,"name":"PARAS","evolvesTo":["PARASECT"]},"PARASECT":{"dex":47,"name":"PARASECT","evolvesTo":[]},"PERSIAN":{"dex":53,"name":"PERSIAN","evolvesTo":[]},"PIDGEOT":{"dex":18,"name":"PIDGEOT","evolvesTo":[]},"PIDGEOTTO":{"dex":17,"name":"PIDGEOTTO","evolvesTo":["PIDGEOT"]},"PIDGEY":{"dex":16,"name":"PIDGEY","evolvesTo":["PIDGEOTTO"]},"PIKACHU":{"dex":25,"name":"PIKACHU","evolvesTo":["RAICHU"]},"PINSIR":{"dex":127,"name":"PINSIR","evolvesTo":[]},"POLIWAG":{"dex":60,"name":"POLIWAG","evolvesTo":["POLIWHIRL"]},"POLIWHIRL":{"dex":61,"name":"POLIWHIRL","evolvesTo":["POLIWRATH"]},"POLIWRATH":{"dex":62,"name":"POLIWRATH","evolvesTo":[]},"PONYTA":{"dex":77,"name":"PONYTA","evolvesTo":["RAPIDASH"]},"PORYGON":{"dex":137,"name":"PORYGON","evolvesTo":[]},"PRIMEAPE":{"dex":57,"name":"PRIMEAPE","evolvesTo":[]},"PSYDUCK":{"dex":54,"name":"PSYDUCK","evolvesTo":["GOLDUCK"]},"RAICHU":{"dex":26,"name":"RAICHU","evolvesTo":[]},"RAPIDASH":{"dex":78,"name":"RAPIDASH","evolvesTo":[]},"RATICATE":{"dex":20,"name":"RATICATE","evolvesTo":[]},"RATTATA":{"dex":19,"name":"RATTATA","evolvesTo":["RATICATE"]},"RHYDON":{"dex":112,"name":"RHYDON","evolvesTo":[]},"RHYHORN":{"dex":111,"name":"RHYHORN","evolvesTo":["RHYDON"]},"SANDSHREW":{"dex":27,"name":"SANDSHREW","evolvesTo":["SANDSLASH"]},"SANDSLASH":{"dex":28,"name":"SANDSLASH","evolvesTo":[]},"SCYTHER":{"dex":123,"name":"SCYTHER","evolvesTo":[]},"SEADRA":{"dex":117,"name":"SEADRA","evolvesTo":[]},"SEAKING":{"dex":119,"name":"SEAKING","evolvesTo":[]},"SEEL":{"dex":86,"name":"SEEL","evolvesTo":["DEWGONG"]},"SHELLDER":{"dex":90,"name":"SHELLDER","evolvesTo":["CLOYSTER"]},"SLOWBRO":{"dex":80,"name":"SLOWBRO","evolvesTo":[]},"SLOWPOKE":{"dex":79,"name":"SLOWPOKE","evolvesTo":["SLOWBRO"]},"SNORLAX":{"dex":143,"name":"SNORLAX","evolvesTo":[]},"SPEAROW":{"dex":21,"name":"SPEAROW","evolvesTo":["FEAROW"]},"SQUIRTLE":{"dex":7,"name":"SQUIRTLE","evolvesTo":["WARTORTLE"]},"STARMIE":{"dex":121,"name":"STARMIE","evolvesTo":[]},"STARYU":{"dex":120,"name":"STARYU","evolvesTo":["STARMIE"]},"TANGELA":{"dex":114,"name":"TANGELA","evolvesTo":[]},"TAUROS":{"dex":128,"name":"TAUROS","evolvesTo":[]},"TENTACOOL":{"dex":72,"name":"TENTACOOL","evolvesTo":["TENTACRUEL"]},"TENTACRUEL":{"dex":73,"name":"TENTACRUEL","evolvesTo":[]},"VAPOREON":{"dex":134,"name":"VAPOREON","evolvesTo":[]},"VENOMOTH":{"dex":49,"name":"VENOMOTH","evolvesTo":[]},"VENONAT":{"dex":48,"name":"VENONAT","evolvesTo":["VENOMOTH"]},"VENUSAUR":{"dex":3,"name":"VENUSAUR","evolvesTo":[]},"VICTREEBEL":{"dex":71,"name":"VICTREEBEL","evolvesTo":[]},"VILEPLUME":{"dex":45,"name":"VILEPLUME","evolvesTo":[]},"VOLTORB":{"dex":100,"name":"VOLTORB","evolvesTo":["ELECTRODE"]},"VULPIX":{"dex":37,"name":"VULPIX","evolvesTo":["NINETALES"]},"WARTORTLE":{"dex":8,"name":"WARTORTLE","evolvesTo":["BLASTOISE"]},"WEEDLE":{"dex":13,"name":"WEEDLE","evolvesTo":["KAKUNA"]},"WEEPINBELL":{"dex":70,"name":"WEEPINBELL","evolvesTo":["VICTREEBEL"]},"WEEZING":{"dex":110,"name":"WEEZING","evolvesTo":[]},"WIGGLYTUFF":{"dex":40,"name":"WIGGLYTUFF","evolvesTo":[]},"ZAPDOS":{"dex":145,"name":"ZAPDOS","evolvesTo":[]},"ZUBAT":{"dex":41,"name":"ZUBAT","evolvesTo":["GOLBAT"]}};
+
+// ---- evolution lines -------------------------------------------------
+const preEvo = {};
+for (const [id, m] of Object.entries(MON)) for (const e of m.evolvesTo) preEvo[e] = id;
+function rootOf(id) { let cur = id; while (preEvo[cur]) cur = preEvo[cur]; return cur; }
+const LINES = {}; // root -> [members sorted by dex]
+for (const id of Object.keys(MON)) {
+  const r = rootOf(id);
+  (LINES[r] = LINES[r] || []).push(id);
+}
+for (const r in LINES) LINES[r].sort((a, b) => MON[a].dex - MON[b].dex);
+const LINE_ROOTS = Object.keys(LINES).sort((a, b) => MON[a].dex - MON[b].dex);
+const ALL = Object.keys(MON).sort((a, b) => MON[a].dex - MON[b].dex);
+const dex = id => String(MON[id].dex).padStart(3, "0");
+const nm = id => MON[id].name;
+
+// ---- state -----------------------------------------------------------
+const KEY = "palcraft_breed_lines_v1";
+const DEFAULTS = {
+  recipes: [
+    { a: "PIDGEY",    b: "SPEAROW",    child: "FARFETCHD",  chance: 100 },
+    { a: "SLOWPOKE",  b: "DROWZEE",    child: "LICKITUNG",  chance: 100 },
+    { a: "NIDORAN_F", b: "CUBONE",     child: "KANGASKHAN", chance: 100 },
+    { a: "SEEL",      b: "HORSEA",     child: "LAPRAS",     chance: 100 },
+    { a: "PONYTA",    b: "DODUO",      child: "TAUROS",     chance: 100 },
+    { a: "PARAS",     b: "VENONAT",    child: "PINSIR",     chance: 100 },
+    { a: "MANKEY",    b: "PARAS",      child: "SCYTHER",    chance: 100 },
+    { a: "CLEFAIRY",  b: "JIGGLYPUFF", child: "CHANSEY",    chance: 100 },
+    { a: "MAGNEMITE", b: "VOLTORB",    child: "PORYGON",    chance: 100 },
+    { a: "DROWZEE",   b: "GRIMER",     child: "SNORLAX",    chance: 100 },
+  ],
+  keepWild: {},
+};
+let state = load();
+function load() {
+  try {
+    const s = JSON.parse(localStorage.getItem(KEY));
+    if (s && Array.isArray(s.recipes)) return s;
+  } catch (e) {}
+  return JSON.parse(JSON.stringify(DEFAULTS));
+}
+function save() { localStorage.setItem(KEY, JSON.stringify(state)); }
+
+// ---- pickers ----------------------------------------------------------
+function fillSelect(sel, ids, labelFn, filter) {
+  const cur = sel.value;
+  sel.innerHTML = "";
+  for (const id of ids) {
+    const label = labelFn(id);
+    if (filter && !label.toLowerCase().includes(filter.toLowerCase())) continue;
+    const o = document.createElement("option");
+    o.value = id;
+    o.textContent = label;
+    sel.appendChild(o);
+  }
+  if ([...sel.options].some(o => o.value === cur)) sel.value = cur;
+  else if (sel.options.length) sel.selectedIndex = 0;
+}
+const lineLabel = r => `#${dex(r)} ${nm(r)} LINE`;
+const monLabel = id => `#${dex(id)} ${nm(id)}`;
+const $ = id => document.getElementById(id);
+
+function refreshPickers() {
+  fillSelect($("lineA"), LINE_ROOTS, lineLabel, $("searchA").value);
+  fillSelect($("lineB"), LINE_ROOTS, lineLabel, $("searchB").value);
+  fillSelect($("child"), ALL, monLabel, $("searchC").value);
+  updateInfo();
+}
+function updateInfo() {
+  const a = $("lineA").value, b = $("lineB").value;
+  $("infoA").textContent = a ? LINES[a].map(nm).join(" → ") : "";
+  $("infoB").textContent = b ? LINES[b].map(nm).join(" → ") : "";
+}
+
+// ---- ledger / roster / export -----------------------------------------
+function breedOnlyChildren() {
+  return [...new Set(state.recipes.map(r => r.child))]
+    .sort((x, y) => MON[x].dex - MON[y].dex);
+}
+function isBreedOnlyLine(rootId) {
+  return breedOnlyChildren().some(c => rootOf(c) === rootId
+    && state.keepWild[c] !== true);
+}
+function render() {
+  const led = $("ledger");
+  led.innerHTML = "";
+  state.recipes.forEach((r, i) => {
+    const tr = document.createElement("tr");
+    const chain = isBreedOnlyLine(r.a) || isBreedOnlyLine(r.b);
+    tr.innerHTML =
+      `<td><span class="chip">${nm(r.a)} LINE</span></td>` +
+      `<td><span class="chip">${nm(r.b)} LINE</span></td>` +
+      `<td><span class="chip child">${nm(r.child)}</span>` +
+        (chain ? ` <span class="chip chain">CHAIN</span>` : ``) + `</td>` +
+      `<td class="num">${r.chance}</td>` +
+      `<td><button class="del" aria-label="delete recipe" data-i="${i}">✕</button></td>`;
+    led.appendChild(tr);
+  });
+  led.querySelectorAll(".del").forEach(b => b.onclick = () => {
+    state.recipes.splice(Number(b.dataset.i), 1);
+    save(); render();
+  });
+
+  const roster = $("roster");
+  roster.innerHTML = "";
+  for (const c of breedOnlyChildren()) {
+    const l = document.createElement("label");
+    const cb = document.createElement("input");
+    cb.type = "checkbox";
+    cb.checked = state.keepWild[c] !== true;
+    cb.onchange = () => {
+      if (cb.checked) delete state.keepWild[c];
+      else state.keepWild[c] = true;
+      save(); render();
+    };
+    l.appendChild(cb);
+    l.appendChild(document.createTextNode(`${nm(c)} #${dex(c)}`));
+    roster.appendChild(l);
+  }
+
+  $("countRecipes").textContent = `${state.recipes.length} RECIPES`;
+  const removed = breedOnlyChildren().filter(c => state.keepWild[c] !== true);
+  $("countBreedOnly").textContent = `${removed.length} BREED-ONLY`;
+  $("luaOut").value = luaExport();
+}
+
+function luaExport() {
+  const lines = state.recipes.map(r =>
+    `    { a = "${r.a}", b = "${r.b}", child = "${r.child}", chance = ${r.chance} },`);
+  const removed = breedOnlyChildren().filter(c => state.keepWild[c] !== true);
+  return [
+    "  -- generated by tools/breed_lines_designer.html — paste over the",
+    "  -- BREED_LINES / BREED_ONLY block in main.lua",
+    "  local BREED_LINES = {",
+    ...lines,
+    "  }",
+    "  local BREED_ONLY = {",
+    ...removed.map(c => `    "${c}",`),
+    "  }",
+  ].join("\n");
+}
+
+// ---- wire up ----------------------------------------------------------
+["searchA", "searchB", "searchC"].forEach(id =>
+  $(id).addEventListener("input", refreshPickers));
+$("lineA").onchange = updateInfo;
+$("lineB").onchange = updateInfo;
+
+$("add").onclick = () => {
+  const a = $("lineA").value, b = $("lineB").value, child = $("child").value;
+  const chance = Math.max(5, Math.min(100, Number($("chance").value) || 100));
+  const msg = $("msg");
+  msg.textContent = "";
+  if (!a || !b || !child) { msg.textContent = "Pick both lines and a hatchling."; return; }
+  if (a === b) { msg.textContent = "The two parent lines must differ."; return; }
+  const dupe = state.recipes.find(r =>
+    (r.a === a && r.b === b) || (r.a === b && r.b === a));
+  if (dupe) { msg.textContent = `That pairing already hatches ${nm(dupe.child)} — delete it first.`; return; }
+  if (rootOf(child) === a || rootOf(child) === b) {
+    msg.textContent = "Note: hatchling is inside a parent line (that pairing changes nothing).";
+  }
+  state.recipes.push({ a, b, child, chance });
+  save(); render();
+};
+
+$("copyLua").onclick = async () => {
+  await navigator.clipboard.writeText($("luaOut").value);
+  $("exportMsg").textContent = "Lua copied.";
+};
+$("copyJson").onclick = async () => {
+  await navigator.clipboard.writeText(JSON.stringify(state, null, 2));
+  $("exportMsg").textContent = "JSON copied.";
+};
+$("importJson").onclick = () => {
+  const t = prompt("Paste breed-lines JSON:");
+  if (!t) return;
+  try {
+    const s = JSON.parse(t);
+    if (!Array.isArray(s.recipes)) throw new Error("no recipes[]");
+    state = { recipes: s.recipes, keepWild: s.keepWild || {} };
+    save(); render();
+    $("exportMsg").textContent = "Imported.";
+  } catch (e) {
+    $("exportMsg").textContent = "That JSON didn't parse: " + e.message;
+  }
+};
+$("reset").onclick = () => {
+  if (!confirm("Replace your recipes with the default drafts?")) return;
+  state = JSON.parse(JSON.stringify(DEFAULTS));
+  save(); render();
+};
+
+refreshPickers();
+render();
+</script>

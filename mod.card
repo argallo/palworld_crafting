@@ -1,0 +1,13 @@
+-- Sharing metadata; read by tooling and the manager detail pane,
+-- never by the loader's merge.
+return {
+  summary = "A Palworld survival economy inside Gen 1: base building, working POKeMON, breeding with egg moves, essence stars, and hourly street bosses.",
+  author = "argallo",
+  contact = "https://github.com/argallo/palworld_crafting",
+  tags = { "gameplay", "palworld", "base-building", "crafting",
+           "breeding", "bosses", "difficulty", "economy" },
+  credits = {
+    { who = "pret/pokered", for_ = "the disassembly the engine and data derive from" },
+  },
+  compat = { engine = ">=0.0.0-dev <1.0.0", modApi = 2 },
+}
