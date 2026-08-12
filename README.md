@@ -1,6 +1,6 @@
 # Palworld Crafting
 
-A Palworld-style survival economy inside Gen 1 Pokemon Red, for
+A Palworld-style survival economy inside Gen 1 Pokemon
 [gen1recomp](https://github.com/bryanthaboi/gen1recomp): secret base, put your Pokemon to work by type, craft your pokeballs, breed for egg moves, condense for stars, craft everything, and duel hourly street bosses.
 
 ## Install
