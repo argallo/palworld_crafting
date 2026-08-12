@@ -18,6 +18,21 @@ and stars, craft everything, and duel hourly street bosses.
 Best experienced on a fresh save. It loads fine mid-save too: your
 existing POKeMON join the star ladder at star 1.
 
+## Screenshots
+
+| | |
+|---|---|
+| ![Pitch the base anywhere](.github/screenshots/secret-base-tent.png) | ![The crew at work](.github/screenshots/base-crew-pc.png) |
+| Pitch your **SECRET BASE** anywhere with SELECT — apricorn bushes grow along every route | Inside: a real working **PC** and your crew wandering the room |
+| ![The workshop](.github/screenshots/base-workshop.png) | ![The incubator](.github/screenshots/incubator-egg.png) |
+| The workshop: **generator, furnace, woodpile**, tables — staffed by type-matched workers | The **EGG INCUBATOR** warming a hatchling beside the grape plot |
+| ![Breeding catalog](.github/screenshots/breeding-catalog.png) | ![Star ranks](.github/screenshots/star-ranks.png) |
+| The assign screen teaches every pairing: **VULPIX▶MAGMAR**, partner needed or not | **Star ranks** `[n]` on the base screens — condense to climb |
+| ![Work skills](.github/screenshots/work-skills-filter.png) | ![MK2 crafting](.github/screenshots/mk2-crafting.png) |
+| The **WORK SKILLS** grid, filtered to one job with SELECT | The **MK2 table**: live queue, helper speed, and material costs |
+| ![Street boss](.github/screenshots/street-boss.png) | ![Summon battle](.github/screenshots/summon-battle.png) |
+| A **street boss GOLEM** looming in Pewter City | Eight shards later: the **summoned, catchable** empowered form |
+
 ## The pitch
 
 Poke Balls leave the shops. Marts no longer sell any ball; instead you
