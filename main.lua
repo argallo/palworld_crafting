@@ -3536,6 +3536,7 @@ return function(mod)
   -- Drops wait here until the overworld script queue is free: right after
   -- a trainer battle the defeat script may still hold the runner.
   local pending = nil
+  local pendingSince = nil
 
   -- every type sheds an ORGAN for the research desk (item 23):
   -- defeated POKéMON have a chance to drop one of THEIR types' organs
@@ -3688,28 +3689,53 @@ return function(mod)
       pending = pending or {}
       pending[id] = (pending[id] or 0) + 1
     end
+    pendingSince = pendingSince
+      or (theGame and theGame.save.playTime) or 0
   end)
 
+  -- Deliver DIRECTLY (bag write + plain TextBox), never through the
+  -- script runner: give_item scripts needed an IDLE runner, and any
+  -- mod that owns the runner for long stretches (overworld-spawn mods
+  -- run their whole battle inside a queued script) starved delivery
+  -- until the next map change reset it.  The direct path only needs
+  -- the overworld on top; a busy runner merely delays it a moment,
+  -- and after a short grace it delivers between the script's rows --
+  -- the same interleaving the badge notices have always done.
   local function settleDrops()
-    if not pending or not mod.world then return end
-    -- give_item halts its script on a full bag AFTER pending is
-    -- cleared, eating the drops -- hold them until there's room
-    if theGame then
-      local Bag = require("src.inventory.Bag")
-      local inv = theGame.save.inventory
-      local fresh = 0
-      for id in pairs(pending) do
-        if not inv[id] then fresh = fresh + 1 end
-      end
-      if Bag.slots(theGame.save) + fresh > Bag.capacity(theGame.data) then
-        return
-      end
+    if not pending or not theGame then return end
+    local ow = theGame.overworld
+    if not ow or theGame.stack:top() ~= ow then return end
+    local now = theGame.save.playTime or 0
+    if ow.runner and ow.runner:isRunning()
+       and now - (pendingSince or now) < 3 then
+      return
     end
-    local rows = {}
-    for id, count in pairs(pending) do
-      rows[#rows + 1] = { "give_item", id, count }
+    local Bag = require("src.inventory.Bag")
+    -- a full bag holds the whole batch until there's room
+    local inv = theGame.save.inventory
+    local fresh = 0
+    for id in pairs(pending) do
+      if not inv[id] then fresh = fresh + 1 end
     end
-    if mod.world:queueScript(rows) then pending = nil end
+    if Bag.slots(theGame.save) + fresh > Bag.capacity(theGame.data) then
+      return
+    end
+    local ids = {}
+    for id in pairs(pending) do ids[#ids + 1] = id end
+    table.sort(ids)
+    local lines = {}
+    for _, id in ipairs(ids) do
+      Bag.add(theGame.save, id, pending[id], theGame.data)
+      local def = theGame.data.items[id]
+      lines[#lines + 1] = ("Found %s x%d!")
+        :format((def and def.name) or id, pending[id])
+    end
+    pending, pendingSince = nil, nil
+    pcall(function()
+      require("src.core.Sound").play(theGame.data, "Get_Item1")
+    end)
+    theGame.stack:push(mod.ui.TextBox.new(theGame,
+      table.concat(lines, "\f")))
   end
 
   -- NEVER settle on screen.popped: engine UI-close callbacks may start
@@ -3992,6 +4018,8 @@ return function(mod)
         pending.RARE_CANDY = (pending.RARE_CANDY or 0) + 1
         local sh = Boss.shardId(b.type)
         pending[sh] = (pending[sh] or 0) + 1
+        pendingSince = pendingSince
+          or (theGame and theGame.save.playTime) or 0
       end
       return
     end
