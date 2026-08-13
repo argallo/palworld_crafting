@@ -760,6 +760,7 @@ return function(mod)
     id = "SPRITE_CRAFT_TABLE",
     image = mod.assets:path("assets/craft_table.png"),
     frames = 1, walker = false,
+    paletteSource = "[2]",  -- ADVANCED mode: brown OBJ group
   })
 
   -- the table is a gift, not a purchase: it arrives with the SECRET
@@ -982,6 +983,7 @@ return function(mod)
     id = "SPRITE_SECRET_BASE",
     image = mod.assets:path("assets/secret_base.png"),
     frames = 1, walker = false,
+    paletteSource = "[0]",  -- ADVANCED mode: red OBJ group
   })
 
   -- The room: 5x5 blocks of plain cave floor (CAVERN block 1 = all
@@ -1155,6 +1157,30 @@ return function(mod)
   -- hook that paints it lives AFTER the theGame declaration (an
   -- earlier registration captured a nil global -- declaration-order
   -- upvalue capture).
+
+  -- ADVANCED (RED++) colors terrain from data/palettes_gbc.lua tables
+  -- keyed by TILESET ID.  Our derived PALCRAFT_HOUSE isn't in them, so
+  -- the room fell back to the DMG shade-remap: washed floor, gray
+  -- player, gray stations.  Alias it to HOUSE's coloring; the appended
+  -- dirt tile (96) wears CAVERN's ground group.
+  do
+    local ok, pack = pcall(require, "data.palettes_gbc")
+    local w = ok and pack and pack.world
+    if w then
+      if w.tileGroups and w.tileGroups.HOUSE
+         and not w.tileGroups.PALCRAFT_HOUSE then
+        local groups = {}
+        for k, v in pairs(w.tileGroups.HOUSE) do groups[k] = v end
+        local cavern = w.tileGroups.CAVERN
+        if cavern and cavern[32] then groups[96] = cavern[32] end
+        w.tileGroups.PALCRAFT_HOUSE = groups
+      end
+      if w.groupColors and w.groupColors.HOUSE
+         and not w.groupColors.PALCRAFT_HOUSE then
+        w.groupColors.PALCRAFT_HOUSE = w.groupColors.HOUSE
+      end
+    end
+  end
 
   -- one base per save, spawned like the tables (runtime object persists
   -- for the session; resync when a save is adopted)
@@ -2977,6 +3003,7 @@ return function(mod)
     id = "SPRITE_CHEST",
     image = mod.assets:path("assets/lab_chest.png"),
     frames = 1, walker = false,
+    paletteSource = "[2]",  -- ADVANCED mode: brown OBJ group
   })
 
   table.insert(RECIPES, { ball = "FERMENTED_JUICE", label = "FERM.JUICE",
@@ -4217,20 +4244,23 @@ return function(mod)
 
   -- ------------------------------------------- the power grid (phase 2)
 
+  -- third field: an ADVANCED-mode OBJ group to borrow ("[0]" red,
+  -- "[1]" blue, "[21]" green, "[2]" brown) -- without one, RED++
+  -- bakes no colors and the station draws as raw DMG grays
   for _, s in ipairs({
-    { "SPRITE_GENERATOR", "assets/generator.png" },
-    { "SPRITE_FURNACE", "assets/furnace.png" },
-    { "SPRITE_MED_BENCH", "assets/med_bench.png" },
-    { "SPRITE_TRAIN_DUMMY", "assets/train_dummy.png" },
-    { "SPRITE_RESEARCH_DESK", "assets/research_desk.png" },
-    { "SPRITE_SHRINE", "assets/shrine.png" },
-    { "SPRITE_LUMBER_PILE", "assets/lumber_pile.png" },
-    { "SPRITE_MINING_ROCK", "assets/mining_rock.png" },
-    { "SPRITE_SUMMON_ALTAR", "assets/summon_altar.png" },
+    { "SPRITE_GENERATOR", "assets/generator.png", "[1]" },
+    { "SPRITE_FURNACE", "assets/furnace.png", "[0]" },
+    { "SPRITE_MED_BENCH", "assets/med_bench.png", "[21]" },
+    { "SPRITE_TRAIN_DUMMY", "assets/train_dummy.png", "[2]" },
+    { "SPRITE_RESEARCH_DESK", "assets/research_desk.png", "[2]" },
+    { "SPRITE_SHRINE", "assets/shrine.png", "[1]" },
+    { "SPRITE_LUMBER_PILE", "assets/lumber_pile.png", "[2]" },
+    { "SPRITE_MINING_ROCK", "assets/mining_rock.png", "[2]" },
+    { "SPRITE_SUMMON_ALTAR", "assets/summon_altar.png", "[1]" },
   }) do
     mod.content.sprites:register(s[1], {
       id = s[1], image = mod.assets:path(s[2]),
-      frames = 1, walker = false,
+      frames = 1, walker = false, paletteSource = s[3],
     })
   end
 
@@ -4337,6 +4367,7 @@ return function(mod)
     id = "SPRITE_CONDENSER",
     image = mod.assets:path("assets/condenser.png"),
     frames = 1, walker = false,
+    paletteSource = "[21]",  -- ADVANCED mode: green OBJ group
   })
   mod.content.item_effects:register("CONDENSER_EFFECT",
     stationPlaceEffect("condenser", "CONDENSER",
