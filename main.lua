@@ -1151,9 +1151,10 @@ return function(mod)
     end
     return next(destMap, x, y, ctx)
   end)
-  -- No palette hook: the room registers without a palette of its own,
-  -- so the engine's interior rule paints it with the LAST OUTDOOR
-  -- map's colors -- the base always matches the doorstep it stands on.
+  -- The room registers without a palette of its own; the map.palette
+  -- hook that paints it lives AFTER the theGame declaration (an
+  -- earlier registration captured a nil global -- declaration-order
+  -- upvalue capture).
 
   -- one base per save, spawned like the tables (runtime object persists
   -- for the session; resync when a save is adopted)
@@ -2463,6 +2464,26 @@ return function(mod)
 
   local theGame
   mod.events:on("game.ready", function(ev) theGame = ev.game end)
+
+  -- The base room wears the palette of the map the TENT STANDS ON.
+  -- The engine's interior fallback (lastOutdoor) is not enough:
+  -- lastOutdoor only updates when the player exits a building door,
+  -- so walking from Cerulean to Lavender and entering the tent
+  -- painted the room with CERULEAN.  No recursion: the inner
+  -- paletteNameFor call carries the outside map's id, which the
+  -- BASE_MAP guard rejects.
+  mod.hooks:wrap("map.palette", function(nextFn, name, map, extra)
+    if map and map.id == BASE_MAP and theGame then
+      local b = mod.save:get("base")
+      local def = b and theGame.data.maps[b.map]
+      local ow = theGame.overworld
+      if def and ow and ow.paletteNameFor then
+        local outside = ow:paletteNameFor({ id = b.map, def = def })
+        if outside then name = outside end
+      end
+    end
+    return nextFn(name, map, extra)
+  end)
 
   local incubatorNpcId = nil
 

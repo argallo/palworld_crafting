@@ -1576,13 +1576,18 @@ return function(game)
   U.wait(10)
   mashToOverworld(120)
 
-  -- the grid coming alive announces the unlock, once, on the next step
-  U.hold(game, "down", 30)
-  U.wait(20)
-  mashToOverworld(120)
-  U.hold(game, "up", 30)
-  U.wait(20)
-  mashToOverworld(120)
+  -- the grid coming alive announces the unlock, once, on the next
+  -- step -- try several directions, since a wandering pal can park on
+  -- any single cell and eat the step (up is always the table itself)
+  for _, dir in ipairs({ "down", "left", "right", "down", "left",
+                         "right" }) do
+    if game.mods.exports.palworld_crafting.inspect("told_mk2") then
+      break
+    end
+    U.hold(game, dir, 30)
+    U.wait(20)
+    mashToOverworld(120)
+  end
   check("the powered grid announced the MK2 unlock",
         game.mods.exports.palworld_crafting.inspect("told_mk2") == true)
 
@@ -2584,6 +2589,15 @@ return function(game)
         tgt.dvs and tgt.dvs.stars == 2
         and tgt.stats.attack > atkBefore)
   check("the offers were consumed", #game.save.boxes[1] == 0)
+
+  -- the room wears its doorstep's palette (community bug: it wore
+  -- the stale lastOutdoor palette instead)
+  local bPal = ex21.inspect("base")
+  check("the base room wears its doorstep's palette",
+        bPal ~= nil and game.overworld.map.id == "PALCRAFT_BASE"
+        and game.overworld:paletteNameFor(game.overworld.map)
+          == game.overworld:paletteNameFor({ id = bPal.map,
+              def = game.data.maps[bPal.map] }))
 
   -- a fresh catch lands dimmed at star 0 (the real catch.rate chain)
   local caught22 = Pokemon.new(game.data, "PIDGEY", 10)
