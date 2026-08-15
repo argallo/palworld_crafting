@@ -545,8 +545,8 @@ its street level, capped at 100. The summon **is** catchable. The
 tablet is consumed when the summon begins — win, catch, or lose.
 
 Tunables in `BALANCE`: `bossSeconds` (two-hour default, override via
-`PALCRAFT_BOSS_SECONDS`), `shardsPerTablet` (8), `summonMultiplier`
-(2).
+the `PALCRAFT_BOSS_SECONDS` playtest knob), `shardsPerTablet` (8),
+`summonMultiplier` (2).
 
 ---
 
@@ -605,7 +605,24 @@ POKEPORT_IDENTITY=palcraft love .`) walks every feature end to end.
 
 ---
 
-## 16. Roadmap
+## 16. Playtest knobs
+
+The engine's mod sandbox has no environment access, so the
+`PALCRAFT_*` overrides live in your save directory's `options.lua`
+instead (they have no manager UI on purpose):
+
+```lua
+return {
+  modOptions = {
+    palworld_crafting = {
+      PALCRAFT_BREED_SECONDS = 5,  -- any clock, in seconds
+      PALCRAFT_FAST = 1,           -- divide every clock by 10
+    },
+  },
+}
+```
+
+## 17. Roadmap
 
 - Apricorn trees on a daily respawn instead of one-time pickups.
 - Kurt-style specialty balls (LEVEL, LURE, MOON, etc.) built on the
