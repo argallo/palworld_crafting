@@ -1,7 +1,7 @@
 {
   "id": "palworld_crafting",
   "name": "Palworld Crafting",
-  "version": "0.9.3",
+  "version": "0.9.4",
   "permissions": [
     "engine_internals"
   ],

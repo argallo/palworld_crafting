@@ -11,14 +11,24 @@ local SCREEN = "PalworldCraftTable"
 return function(mod)
 
   -- ============================= BALANCE =============================
-  -- Every tunable in one place.  PALCRAFT_<X>_SECONDS env vars override
-  -- individual clocks; PALCRAFT_FAST=1 divides every clock (and recipe
-  -- work time) by 10 for structural playtests.  The balance sheet
-  -- artifact renders from this table + the recipe tables
-  -- (tools/gen_balance_sheet.lua), so tune here and regenerate.
-  local FAST = os.getenv("PALCRAFT_FAST") == "1"
+  -- Every tunable in one place.  The engine's mod sandbox removed
+  -- os.getenv, so the old PALCRAFT_* env overrides now ride
+  -- options.modOptions instead: seed the identity's options.lua with
+  -- modOptions = { palworld_crafting = { PALCRAFT_BREED_SECONDS = 5,
+  -- ... } } for test runs (mod.options:get returns stored values even
+  -- for keys with no schema row, so these stay off the manager UI).
+  -- PALCRAFT_FAST = 1 divides every clock (and recipe work time) by
+  -- 10 for structural playtests.  The balance sheet artifact renders
+  -- from this table + the recipe tables (tools/gen_balance_sheet.lua),
+  -- so tune here and regenerate.
+  -- on exports, not a local: the entry chunk rides the LuaJIT
+  -- 200-local limit
+  mod.exports._knob = function(name)
+    return tonumber(mod.options and mod.options:get(name) or nil)
+  end
+  local FAST = mod.exports._knob("PALCRAFT_FAST") == 1
   local function clock(env, default)
-    local v = tonumber(os.getenv(env))
+    local v = mod.exports._knob(env)
     if v then return v end
     return FAST and default / 10 or default
   end
@@ -42,8 +52,8 @@ return function(mod)
     lumberSeconds = clock("PALCRAFT_LUMBER_SECONDS", 240),
     mineSeconds = clock("PALCRAFT_MINE_SECONDS", 240),
     -- per-recipe work times live on the recipes; these override them
-    craftSecondsOverride = tonumber(os.getenv("PALCRAFT_CRAFT_SECONDS")),
-    medSecondsOverride = tonumber(os.getenv("PALCRAFT_MED_SECONDS")),
+    craftSecondsOverride = mod.exports._knob("PALCRAFT_CRAFT_SECONDS"),
+    medSecondsOverride = mod.exports._knob("PALCRAFT_MED_SECONDS"),
 
     -- piles and caps
     candyCap = 5,          -- uncollected RARE CANDY at the dummy
@@ -1360,8 +1370,20 @@ return function(mod)
     local id = "SPRITE_WILD_" .. species
     if mod.content.sprites:get(id) == nil then
       local file = ENC_SPRITES .. "follower_" .. species .. ".png"
-      local ok, info = pcall(love.filesystem.getInfo, file, "file")
-      if ok and info then
+      -- the sandbox dropped love.filesystem; probing a sibling mod's
+      -- art now goes through love.image (allowed), where a missing
+      -- file simply fails the pcall.  The dimension check keeps this
+      -- honest under permissive stubs: a real follower sheet is
+      -- 16x96 (6 walker frames)
+      local ok, img = false, nil
+      if love and love.image and love.image.newImageData then
+        ok, img = pcall(love.image.newImageData, file)
+      end
+      if ok and img and img.getDimensions then
+        local w, h = img:getDimensions()
+        if w ~= 16 or h ~= 96 then ok = false end
+      end
+      if ok and img then
         mod.content.sprites:register(id, {
           id = id, image = file, frames = 6, walker = true, trueColor = true,
         })
@@ -4457,7 +4479,7 @@ return function(mod)
     local origUpdate = OverworldState.update
     -- dev spot marker (PALCRAFT_MARK=1): stand on the cell, tap M,
     -- and the spot lands in palcraft_spots.txt in the save directory
-    local marking = os.getenv("PALCRAFT_MARK") == "1"
+    local marking = mod.exports._knob("PALCRAFT_MARK") == 1
     local markHeld = false
     OverworldState.update = function(self, dt)
       origUpdate(self, dt)
@@ -4469,11 +4491,12 @@ return function(mod)
       if marking and love.keyboard then
         local down = love.keyboard.isDown("m")
         if down and not markHeld then
-          local line = ("%s\t%d\t%d\n"):format(
+          -- the sandbox dropped love.filesystem: marks go to stdout
+          -- (grab them from the run log)
+          print(("PALCRAFT MARK\t%s\t%d\t%d"):format(
             self.map and self.map.id or "?",
             self.player and self.player.cellX or -1,
-            self.player and self.player.cellY or -1)
-          pcall(love.filesystem.append, "palcraft_spots.txt", line)
+            self.player and self.player.cellY or -1))
           game.stack:push(mod.ui.TextBox.new(game,
             ("Marked %s\n(%d, %d)"):format(
               self.map and self.map.id or "?",
